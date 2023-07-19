@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - "main"
-
 jobs:
   build-image:
     name: Build
@@ -13,8 +12,14 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
+      - name: Install qemu
+        run: sudo apt-get update && sudo apt-get install qemu-system -y
+      
+      - name: Setup packer
+        uses: hashicorp/setup-packer@main
+
       - name: Packer Init
         run: packer init .
 
       - name: Packer Build
-        run: packer build .
+        run: sudo -E packer build .
