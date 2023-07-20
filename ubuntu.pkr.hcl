@@ -48,6 +48,20 @@ variable "version" {
   default = ""
 }
 
+variable "format" {
+  type    = string
+  default = "qcow2"
+}
+
+packer {
+  required_plugins {
+    qemu = {
+      source  = "github.com/hashicorp/qemu"
+      version = "~> 1"
+    }
+  }
+}
+
 source "qemu" "jammy" {
   accelerator            = "kvm"
   boot_command      = []
@@ -58,12 +72,12 @@ source "qemu" "jammy" {
   disk_interface         = "virtio"
   disk_image = true
   disk_size              = var.disk_size
-  format                 = "qcow2"
+  format                 = var.format
   headless               = var.headless
   iso_checksum           = var.iso_checksum
   iso_url                = var.iso_url
   net_device             = "virtio-net"
-  output_directory       = "artifacts/qemu/${var.name}${var.version}"
+  output_directory       = "artifacts/qemu/${var.name}${var.version}.${var.format}"
   qemuargs               = [
     ["-m", "${var.ram}M"],
     ["-smp", "${var.cpu}"],
@@ -85,6 +99,6 @@ build {
 
   provisioner "shell" {
     execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
-    inline          = ["sudo apt update", "sudo dist-upgrade", "sudo apt autoremove -y", "sudo apt clean"]
+    inline          = ["sudo apt update"]
   }
 }
