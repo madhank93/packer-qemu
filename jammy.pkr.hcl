@@ -94,4 +94,9 @@ build {
     execute_command = "{{ .Vars }} sudo -E bash '{{ .Path }}'"
     inline          = ["sudo apt update"]
   }
+
+  post-processor "shell-local" {
+    environment_vars = ["IMAGE_NAME=${var.name}", "IMAGE_VERSION=${var.version}", "IMAGE_FORMAT=${var.format}"]
+    script           = "scripts/prepare-image.sh"
+  }
 }
