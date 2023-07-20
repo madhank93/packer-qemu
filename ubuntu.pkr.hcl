@@ -63,35 +63,28 @@ packer {
 }
 
 source "qemu" "jammy" {
-  accelerator            = "kvm"
-  boot_command      = []
-//   boot_wait              = "3s"
-  disk_cache             = "none"
-  disk_compression       = true
-//   disk_discard           = "ignore"
-  disk_interface         = "virtio"
-  disk_image = true
-  disk_size              = var.disk_size
-  format                 = var.format
-  headless               = var.headless
-  iso_checksum           = var.iso_checksum
-  iso_url                = var.iso_url
-  net_device             = "virtio-net"
-  output_directory       = "artifacts/qemu/${var.name}${var.version}.${var.format}"
-  qemuargs               = [
+  accelerator      = "kvm"
+  boot_command     = []
+  disk_compression = true
+  disk_interface   = "virtio"
+  disk_image       = true
+  disk_size        = var.disk_size
+  format           = var.format
+  headless         = var.headless
+  iso_checksum     = var.iso_checksum
+  iso_url          = var.iso_url
+  net_device       = "virtio-net"
+  output_directory = "artifacts/qemu/${var.name}${var.version}"
+  qemuargs = [
     ["-m", "${var.ram}M"],
     ["-smp", "${var.cpu}"],
-    // ["-smbios", "type=1,serial=ds='nocloud-net;seedfrom=http://{{ .HTTPIP }}:{{ .HTTPPort }}/'"]
     ["-cdrom", "cidata.iso"]
   ]
-  http_directory         = "http"
-  communicator = "ssh"
+  communicator           = "ssh"
   shutdown_command       = "echo '${var.ssh_password}' | sudo -S shutdown -P now"
-  ssh_handshake_attempts = 500
   ssh_password           = var.ssh_password
-  ssh_timeout            = "45m"
   ssh_username           = var.ssh_username
-  ssh_wait_timeout       = "45m"
+  ssh_timeout            = "10m"
 }
 
 build {
