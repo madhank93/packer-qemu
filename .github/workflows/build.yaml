@@ -25,3 +25,11 @@ jobs:
         run: |
           sudo chmod o+rw /dev/kvm
           packer build .
+
+      - name: Upload images and their SHA to Github Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: alexellis/upload-assets@0.4.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          asset_paths: '["./artifacts/qemu/*/*"]'
