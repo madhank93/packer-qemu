@@ -22,4 +22,6 @@ jobs:
         run: packer init .
 
       - name: Packer Build
-        run: sudo -E packer build .
+        run: |
+          sudo chmod o+rw /dev/kvm
+          packer build .
