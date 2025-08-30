@@ -5,11 +5,11 @@ on:
     branches:
       - 'main'
   workflow_dispatch:
-    
+
 jobs:
   build-image:
     name: Build
-    runs-on: actuated
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
